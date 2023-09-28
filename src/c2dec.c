@@ -35,6 +35,7 @@
 #include "c2file.h"
 #include "codec2.h"
 #include "dump.h"
+#include "pipe.h"
 
 #define NONE 0          /* no bit errors                          */
 #define UNIFORM 1       /* random bit errors                      */
@@ -88,6 +89,8 @@ int main(int argc, char *argv[]) {
   int num_opts = sizeof(long_options) / sizeof(struct option);
 
   if (argc < 4) print_help(long_options, num_opts, argv);
+
+  init_binary_stdin_stdout();
 
   if (strcmp(argv[2], "-") == 0)
     fin = stdin;

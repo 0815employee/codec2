@@ -40,6 +40,7 @@
 #include "cohpsk_internal.h"
 #include "debug_alloc.h"
 #include "octave.h"
+#include "pipe.h"
 
 #define LOG_FRAMES 100
 #define SYNC_FRAMES \
@@ -56,6 +57,7 @@ int opt_exists(char *argv[], int argc, char opt[]) {
 }
 
 int main(int argc, char *argv[]) {
+  init_binary_stdin_stdout();
   FILE *fin, *fout, *foct;
   struct COHPSK *cohpsk;
   float rx_bits[COHPSK_BITS_PER_FRAME];

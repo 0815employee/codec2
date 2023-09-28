@@ -40,6 +40,7 @@
 #include "ldpc_codes.h"
 #include "modem_stats.h"
 #include "octave.h"
+#include "pipe.h"
 
 /* other processes can end this program using signals */
 
@@ -65,6 +66,8 @@ int main(int argc, char *argv[]) {
   float snr_sum = 0.0;
   int fsk_lower = 0, fsk_upper = 0;
   int user_fsk_lower = 0, user_fsk_upper = 0;
+
+  init_binary_stdin_stdout();
 
   int o = 0;
   int opt_idx = 0;

@@ -19,6 +19,7 @@
 #include "ldpc_codes.h"
 #include "mpdecode_core.h"
 #include "ofdm_internal.h"
+#include "pipe.h"
 
 int opt_exists(char *argv[], int argc, char opt[]) {
   int i;
@@ -31,6 +32,8 @@ int opt_exists(char *argv[], int argc, char opt[]) {
 }
 
 int main(int argc, char *argv[]) {
+  init_binary_stdin_stdout();
+
   int CodeLength, NumberParityBits;
   int i, codename, parityCheckCount, mute, testframes;
   int data_bits_per_frame;

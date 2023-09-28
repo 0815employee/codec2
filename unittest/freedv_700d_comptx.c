@@ -13,9 +13,13 @@
 
 #include "defines.h"
 #include "freedv_api.h"
+#include "pipe.h"
+
 
 int main(int argc, char *argv[]) {
   struct freedv *freedv;
+
+  init_binary_stdin_stdout();
 
   freedv = freedv_open(FREEDV_MODE_700D);
   assert(freedv != NULL);
@@ -26,8 +30,6 @@ int main(int argc, char *argv[]) {
   int n_nom_modem_samples = freedv_get_n_nom_modem_samples(freedv);
   VLA_CALLOC(COMP, mod_out, n_nom_modem_samples);
   VLA_CALLOC(short, mod_out_short, 2 * n_nom_modem_samples);
-
-  /* OK main loop  --------------------------------------- */
 
   while (fread(speech_in, sizeof(short), n_speech_samples, stdin) ==
          n_speech_samples) {

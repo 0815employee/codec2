@@ -20,7 +20,11 @@
 #include "freedv_api_internal.h"
 #include "ofdm_internal.h"
 
+#include "pipe.h"
+
 int main(int argc, char *argv[]) {
+  init_binary_stdin_stdout();
+
   /* with no arguments then run with no test code */
   int test_num = 0;
   if (argc == 2) {

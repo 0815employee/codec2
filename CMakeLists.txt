@@ -112,9 +112,10 @@ if(NOT MSVC)
 set(CMAKE_C_FLAGS_DEBUG "-g -O2 -DDUMP")
 set(CMAKE_C_FLAGS_RELEASE "-O3")
 else()
-set(CMAKE_C_FLAGS_DEBUG "/Zi")
+set(CMAKE_C_FLAGS_DEBUG "/Zi /DDUMP")
 set(CMAKE_C_FLAGS_RELEASE "/O2")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4244 /wd4305 /wd5045")
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4244 /wd4305 /wd5045 /wd4710 /wd4820 /wd4711 /wd4255")
 
  
 endif()
@@ -222,14 +223,37 @@ if(LPCNET)
     endif()
 endif()
 
+function(include_getopt)
+    if(NOT MSVC)
+        return()
+    endif()
+
+    target_include_directories(${ARGV0} PRIVATE "${CMAKE_SOURCE_DIR}/src/win/include")
+endfunction()
+
+function(codec2_add_executable)
+    cmake_parse_arguments(ARGS "LINK_M;LINK_NO_CODEC" "TARGET" "SOURCES" ${ARGN})
+
+    add_executable(${ARGS_TARGET} ${ARGS_SOURCES})
+    if(NOT ${ARGS_LINK_NO_CODEC})
+        target_link_libraries(${ARGS_TARGET} codec2)
+    endif()
+    if(NOT MSVC AND ${ARGS_LINK_M})
+        target_link_libraries(${ARGS_TARGET} m)
+    endif()
+
+    if(MSVC)
+        include_getopt(${ARGS_TARGET})
+        target_compile_definitions(${ARGS_TARGET} PRIVATE _USE_MATH_DEFINES)
+    endif()
+endfunction()
+
 
 #
 # codec2 library and demo apps
 #
 add_subdirectory(src)
-if(NOT MSVC)
 add_subdirectory(demo)
-endif()
 
 if(UNITTEST)
     # Pthread Library
@@ -998,7 +1022,7 @@ endif(LPCNET)
     #                                FreeDV API memory leaks
     # -------------------------------------------------------------------------
 
-if (NOT APPLE)
+if (NOT APPLE AND NOT MSVC)
      add_test(NAME test_memory_leak_FreeDV_1600_tx
              COMMAND sh -c " valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./freedv_tx 1600 ${CMAKE_CURRENT_SOURCE_DIR}/raw/hts1a.raw /dev/null"
              WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/src
@@ -1110,8 +1134,8 @@ if(LPCNET)
                             ./freedv_rx 2020B t.raw /dev/null"
              )
              set_tests_properties(test_memory_leak_FreeDV_2020B_rx PROPERTIES PASS_REGULAR_EXPRESSION "ERROR SUMMARY: 0 errors")
-endif(LPCNET)
-endif(NOT APPLE)
+endif()
+endif()
 
     # -------------------------------------------------------------------------
     #                                Codec 2 modes
@@ -1277,45 +1301,45 @@ endif(NOT APPLE)
      # Burst mode with test frames: 3 bursts, each burst is two frames long
      add_test(NAME test_freedv_data_raw_ofdm_datac0_burst
              COMMAND sh -c "cd ${CMAKE_CURRENT_BINARY_DIR}/src;
-                            ./freedv_data_raw_tx --framesperburst 2 --bursts 3 --testframes 6 DATAC0 /dev/zero - |
+                            ./freedv_data_raw_tx --framesperburst 2 --bursts 3 --testframes 6 DATAC0 /dev/null - |
                             ./freedv_data_raw_rx --framesperburst 2 --testframes DATAC0 - /dev/null --vv")
              set_tests_properties(test_freedv_data_raw_ofdm_datac0_burst PROPERTIES PASS_REGULAR_EXPRESSION "Coded FER: 0.0000 Tfrms:     6 Tfers:     0")
 
      # Burst mode with data file I/O:
      add_test(NAME test_freedv_data_raw_ofdm_datac0_burst_file
              COMMAND sh -c "cd ${CMAKE_CURRENT_BINARY_DIR}/src;
-                            head -c $((14*10)) </dev/urandom > binaryIn.bin;
-                            ./freedv_data_raw_tx DATAC0 binaryIn.bin - --bursts 10 |
-                            ./freedv_data_raw_rx DATAC0 - binaryOut.bin  -v;
-                            diff binaryIn.bin binaryOut.bin")
+                            head -c $((14*10)) </dev/urandom > binaryIn0.bin;
+                            ./freedv_data_raw_tx DATAC0 binaryIn0.bin - --bursts 10 |
+                            ./freedv_data_raw_rx DATAC0 - binaryOut0.bin  -v;
+                            diff binaryIn0.bin binaryOut0.bin")
 
      add_test(NAME test_freedv_data_raw_ofdm_datac1_burst_file
              COMMAND sh -c "cd ${CMAKE_CURRENT_BINARY_DIR}/src;
-                            head -c $((510*10)) </dev/urandom > binaryIn.bin;
-                            ./freedv_data_raw_tx DATAC1 binaryIn.bin - --bursts 10 |
-                            ./freedv_data_raw_rx DATAC1 - binaryOut.bin -v;
-                            diff binaryIn.bin binaryOut.bin")
+                            head -c $((510*10)) </dev/urandom > binaryIn1.bin;
+                            ./freedv_data_raw_tx DATAC1 binaryIn1.bin - --bursts 10 |
+                            ./freedv_data_raw_rx DATAC1 - binaryOut1.bin -v;
+                            diff binaryIn1.bin binaryOut1.bin")
 
      add_test(NAME test_freedv_data_raw_ofdm_datac3_burst_file
              COMMAND sh -c "cd ${CMAKE_CURRENT_BINARY_DIR}/src;
-                            head -c $((126*10)) </dev/urandom > binaryIn.bin;
-                            ./freedv_data_raw_tx DATAC3 binaryIn.bin - --bursts 10 |
-                            ./freedv_data_raw_rx DATAC3 - binaryOut.bin -v;
-                            diff binaryIn.bin binaryOut.bin")
+                            head -c $((126*10)) </dev/urandom > binaryIn2.bin;
+                            ./freedv_data_raw_tx DATAC3 binaryIn2.bin - --bursts 10 |
+                            ./freedv_data_raw_rx DATAC3 - binaryOut2.bin -v;
+                            diff binaryIn2.bin binaryOut2.bin")
 
      add_test(NAME test_freedv_data_raw_ofdm_datac4_burst_file
              COMMAND sh -c "cd ${CMAKE_CURRENT_BINARY_DIR}/src;
-                            head -c $((54*10)) </dev/urandom > binaryIn.bin;
-                            ./freedv_data_raw_tx DATAC4 binaryIn.bin - --bursts 10 |
-                            ./freedv_data_raw_rx DATAC4 - binaryOut.bin -v;
-                            diff binaryIn.bin binaryOut.bin")
+                            head -c $((54*10)) </dev/urandom > binaryIn3.bin;
+                            ./freedv_data_raw_tx DATAC4 binaryIn3.bin - --bursts 10 |
+                            ./freedv_data_raw_rx DATAC4 - binaryOut3.bin -v;
+                            diff binaryIn3.bin binaryOut3.bin")
 
      add_test(NAME test_freedv_data_raw_ofdm_datac13_burst_file
              COMMAND sh -c "cd ${CMAKE_CURRENT_BINARY_DIR}/src;
-                            head -c $((14*10)) </dev/urandom > binaryIn.bin;
-                            ./freedv_data_raw_tx DATAC13 binaryIn.bin - --bursts 10 |
-                            ./freedv_data_raw_rx DATAC13 - binaryOut.bin -v;
-                            diff binaryIn.bin binaryOut.bin")
+                            head -c $((14*10)) </dev/urandom > binaryIn4.bin;
+                            ./freedv_data_raw_tx DATAC13 binaryIn4.bin - --bursts 10 |
+                            ./freedv_data_raw_rx DATAC13 - binaryOut4.bin -v;
+                            diff binaryIn4.bin binaryOut4.bin")
 
      # FSK LDPC default 100 bit/s 2FSK, enough noise for several % raw BER to give
      # FEC/acquisition a work out, bursts of 1 frame as that stresses acquisition
@@ -1376,10 +1400,10 @@ endif(NOT APPLE)
  
       add_test(NAME test_demo_datac1
              COMMAND sh -c "cd ${CMAKE_CURRENT_BINARY_DIR};
-                            head -c $((510*10)) </dev/urandom > binaryIn.bin;
-                            cat binaryIn.bin | ./demo/freedv_datac1_tx | 
-                            ./demo/freedv_datac1_rx > binaryOut.bin;
-                            diff binaryIn.bin binaryOut.bin")
+                            head -c $((510*10)) </dev/urandom > binaryIn5.bin;
+                            cat binaryIn5.bin | ./demo/freedv_datac1_tx |
+                            ./demo/freedv_datac1_rx > binaryOut5.bin;
+                            diff binaryIn5.bin binaryOut5.bin")
 
       # test Rx of two modes in parallel, with AWGN noise and sample clock offsets
       add_test(NAME test_demo_datac0c1
@@ -1407,4 +1431,6 @@ endif(NOT APPLE)
         PROPERTIES
         ENVIRONMENT "CML_PATH=${CMAKE_CURRENT_BINARY_DIR}/cml"
     )
+
+
 endif(UNITTEST)

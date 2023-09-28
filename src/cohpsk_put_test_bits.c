@@ -36,10 +36,13 @@
 
 #include "codec2_cohpsk.h"
 #include "octave.h"
+#include "pipe.h"
 
 #define LOG_FRAMES 100
 
 int main(int argc, char *argv[]) {
+  init_binary_stdin_stdout();
+
   FILE *fin, *foct;
   char rx_bits[COHPSK_BITS_PER_FRAME];
   int state, i, nbits, bit_errors, nerrors;

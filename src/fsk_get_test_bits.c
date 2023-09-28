@@ -30,6 +30,7 @@
 #include <string.h>
 
 #include "fsk.h"
+#include "pipe.h"
 
 #define TEST_FRAME_SIZE                       \
   100 /* arbitrary choice, repeats after this \
@@ -42,6 +43,8 @@ int main(int argc, char *argv[]) {
   int i;
   FILE *fout;
   uint8_t *bitbuf;
+
+  init_binary_stdin_stdout();
 
   if (argc < 3) {
     fprintf(stderr, "usage: %s OutputBitsOnePerByte numBits [framesize]\n",

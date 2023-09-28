@@ -51,6 +51,7 @@
 
 #include "defines.h"
 #include "freedv_api.h"
+#include "pipe.h"
 
 #define NBUF 160
 
@@ -58,6 +59,8 @@ int run_receiver(struct freedv *freedv, short buf[], short demod_in[], int *pn,
                  uint8_t bytes_out[]);
 
 int main(int argc, char *argv[]) {
+  init_binary_stdin_stdout();
+
   // set up DATAC0 Rx
   struct freedv *freedv_c0 = freedv_open(FREEDV_MODE_DATAC0);
   assert(freedv_c0 != NULL);

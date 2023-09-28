@@ -41,7 +41,7 @@
 #include "string.h"
 
 #define VLA_CALLOC(type, name, len) \
-  type* name = (type*)calloc(len, sizeof(type))
+  type* name = len ? (type*)calloc(len, sizeof(type)) : NULL
 
 #define VLA_CALLOC2(type, name1, name2, len) \
   VLA_CALLOC(type, name1, len);              \

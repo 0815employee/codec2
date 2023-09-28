@@ -34,6 +34,7 @@
 
 #include "c2file.h"
 #include "codec2.h"
+#include "pipe.h"
 
 int main(int argc, char *argv[]) {
   int mode;
@@ -83,6 +84,8 @@ int main(int argc, char *argv[]) {
             argv[1]);
     exit(1);
   }
+
+  init_binary_stdin_stdout();
 
   if (strcmp(argv[2], "-") == 0)
     fin = stdin;

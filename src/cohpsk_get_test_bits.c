@@ -34,8 +34,10 @@
 
 #include "codec2_cohpsk.h"
 #include "test_bits_coh.h"
+#include "pipe.h"
 
 int main(int argc, char *argv[]) {
+  init_binary_stdin_stdout();
   FILE *fout;
   int tx_bits[COHPSK_BITS_PER_FRAME];
   char tx_bits_char[COHPSK_BITS_PER_FRAME];

@@ -32,6 +32,7 @@
 #include "codec2_fdmdv.h"
 #include "defines.h"
 #include "fsk.h"
+#include "pipe.h"
 
 int main(int argc, char *argv[]) {
   struct FSK *fsk;
@@ -43,6 +44,8 @@ int main(int argc, char *argv[]) {
   int bytes_per_sample = 2;
   float amp = FDMDV_SCALE;
   int test_mode = 0;
+
+  init_binary_stdin_stdout();
 
   char usage[] =
       "usage: %s [-p P] [-c] [-a Amplitude] [-t] Mode SampleFreq SymbolFreq "

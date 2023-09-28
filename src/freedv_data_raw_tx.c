@@ -39,6 +39,7 @@
 #include "fsk.h"
 #include "ldpc_codes.h"
 #include "ofdm_internal.h"
+#include "pipe.h"
 
 size_t send_preamble(struct freedv *freedv, FILE *fout, int use_complex,
                      size_t n_mod_out);
@@ -63,6 +64,8 @@ int main(int argc, char *argv[]) {
   int inter_burst_delay_ms = 0;
   int postdelay_ms = 0;
   uint8_t source_byte = 0;
+
+  init_binary_stdin_stdout();
 
   use_clip = -1;
   use_txbpf = -1;

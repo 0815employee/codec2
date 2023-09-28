@@ -35,6 +35,7 @@
 #include "defines.h"
 #include "freedv_api.h"
 #include "reliable_text.h"
+#include "pipe.h"
 
 struct my_callback_state {
   char tx_str[80];
@@ -58,6 +59,7 @@ void on_reliable_text_rx(reliable_text_t rt, const char *txt_ptr, int length,
 }
 
 int main(int argc, char *argv[]) {
+  init_binary_stdin_stdout();
   FILE *fin, *fout;
   struct freedv *freedv;
   int mode;

@@ -32,6 +32,7 @@
 
 #include "defines.h"
 #include "fsk.h"
+#include "pipe.h"
 
 unsigned int toInt(char c) {
   if (c >= '0' && c <= '9') return c - '0';
@@ -53,6 +54,8 @@ int main(int argc, char *argv[]) {
             "decisions\n");
     exit(1);
   }
+
+  init_binary_stdin_stdout();
 
   if (strcmp(argv[1], "-") == 0) {
     fin = stdin;

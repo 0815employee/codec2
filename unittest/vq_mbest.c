@@ -16,6 +16,7 @@
 
 #include "defines.h"
 #include "mbest.h"
+#include "pipe.h"
 
 #define MAX_K 20
 #define MAX_ENTRIES 4096
@@ -27,8 +28,9 @@ void quant_mbest(float vec_out[], int indexes[], float vec_in[], int num_stages,
 int verbose = 0;
 
 int main(int argc, char *argv[]) {
-  float vq[MAX_STAGES * MAX_K * MAX_ENTRIES];
-  float vqw[MAX_STAGES * MAX_K * MAX_ENTRIES];
+  // stack overflow if allocated on stack
+  VLA_CALLOC(float, vq, MAX_STAGES * MAX_K * MAX_ENTRIES);
+  VLA_CALLOC(float, vqw, MAX_STAGES * MAX_K * MAX_ENTRIES);
   int m[MAX_STAGES];
   int k = 0, mbest_survivors = 1, num_stages = 0;
   char fnames[256], fn[256], *comma, *p;
@@ -38,6 +40,8 @@ int main(int argc, char *argv[]) {
   int en = -1;
   int num = INT_MAX;
   int output_vec_usage = 0;
+
+  init_binary_stdin_stdout();
 
   int o = 0;
   int opt_idx = 0;
@@ -303,5 +307,5 @@ void quant_mbest(float vec_out[], int indexes[], float vec_in[], int num_stages,
 
   for (i = 0; i < num_stages; i++) mbest_destroy(mbest_stage[i]);
 
-  VLA_FREE(err, index, mbest_stage, target);
+  VLA_FREE(err, index, mbest_stage, target, vq, vqw);
 }

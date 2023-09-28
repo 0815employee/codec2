@@ -32,6 +32,7 @@
 #include <string.h>
 
 #include "fsk.h"
+#include "pipe.h"
 
 #define TEST_FRAME_SIZE 100 /* must match fsk_get_test_bits.c */
 
@@ -47,6 +48,8 @@ int main(int argc, char *argv[]) {
   uint8_t *bitbuf_tx, *bitbuf_rx, abyte, abit;
   int verbose = 1;
   int packed_in = 0;
+
+  init_binary_stdin_stdout();
 
   char usage[] =
       "usage: %s [-f frameSizeBits] [-t VaildFrameBERThreshold] [-b BERPass] "

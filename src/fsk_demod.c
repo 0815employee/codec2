@@ -34,12 +34,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <unistd.h>
+//#include <unistd.h>
 
 #include "codec2_fdmdv.h"
 #include "fsk.h"
 #include "modem_stats.h"
 #include "mpdecode_core.h"
+#include "pipe.h"
 
 /* cleanly exit when we get a SIGTERM */
 
@@ -76,6 +77,8 @@ int main(int argc, char *argv[]) {
   int nsym = FSK_DEFAULT_NSYM;
   int mask = 0;
   int tone_separation = 100;
+
+  init_binary_stdin_stdout();
 
   int o = 0;
   int opt_idx = 0;

@@ -13,8 +13,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "pipe.h"
 
 int main(int argc, char *argv[]) {
+  init_binary_stdin_stdout();
   FILE *fin, *fout;
   float datain, dataout;
 

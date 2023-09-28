@@ -40,6 +40,7 @@
 #include "freedv_api.h"
 #include "ht_coeff.h"
 #include "ssbfilt_coeff.h"
+#include "pipe.h"
 
 #define BUF_N 160
 #define MPG_DELAY_MS 0.5
@@ -68,6 +69,7 @@ COMP noise(void) {
 }
 
 int main(int argc, char *argv[]) {
+  init_binary_stdin_stdout();
   FILE *fin, *ffading, *fout;
   char *fading_dir;
   float NodB, foff_hz;

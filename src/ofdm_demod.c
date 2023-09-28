@@ -47,6 +47,7 @@
 #include "octave.h"
 #include "ofdm_internal.h"
 #include "optparse.h"
+#include "pipe.h"
 
 #define IS_DIR_SEPARATOR(c) ((c) == '/')
 
@@ -127,6 +128,7 @@ int main(int argc, char *argv[]) {
 
   setvbuf(stdin, NULL, _IONBF, BUFSIZ);
   setvbuf(stdout, NULL, _IONBF, BUFSIZ);
+  init_binary_stdin_stdout();
 
   FILE *fin = stdin;
   FILE *fout = stdout;

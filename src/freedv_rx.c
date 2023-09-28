@@ -42,6 +42,7 @@
 #include "freedv_api.h"
 #include "modem_stats.h"
 #include "reliable_text.h"
+#include "pipe.h"
 
 #define NDISCARD \
   5 /* BER measure optionally discards first few frames after sync */
@@ -61,6 +62,7 @@ void on_reliable_text_rx(reliable_text_t rt, const char *txt_ptr, int length,
 }
 
 int main(int argc, char *argv[]) {
+  init_binary_stdin_stdout();
   FILE *fin, *fout, *ftxt_rx = NULL;
   int nin, nout, nout_total = 0, frame = 0;
   struct MODEM_STATS stats = {0};

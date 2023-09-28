@@ -34,6 +34,7 @@
 #include "defines.h"
 #include "freedv_api.h"
 #include "ofdm_internal.h"
+#include "pipe.h"
 
 #define FRAMES 10
 
@@ -41,6 +42,8 @@ void send_burst(struct freedv *freedv);
 
 int main(void) {
   struct freedv *freedv_c0, *freedv_c1;
+
+  init_binary_stdin_stdout();
 
   freedv_c0 = freedv_open(FREEDV_MODE_DATAC0);
   assert(freedv_c0 != NULL);

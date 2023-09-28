@@ -37,11 +37,11 @@
 #include "codec2_fdmdv.h"
 #include "fdmdv_internal.h"
 #include "octave.h"
+#include "pilot_coeff.h"
 
 #define FRAMES 35
 #define CHANNEL_BUF_SIZE (10 * M_FAC)
 
-extern float pilot_coeff[];
 
 int main(int argc, char *argv[]) {
   struct FDMDV *fdmdv;

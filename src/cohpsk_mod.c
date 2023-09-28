@@ -36,6 +36,7 @@
 
 #include "codec2_cohpsk.h"
 #include "codec2_fdmdv.h"
+#include "pipe.h"
 
 int opt_exists(char *argv[], int argc, char opt[]) {
   int i;
@@ -48,6 +49,7 @@ int opt_exists(char *argv[], int argc, char opt[]) {
 }
 
 int main(int argc, char *argv[]) {
+  init_binary_stdin_stdout();
   FILE *fin, *fout;
   struct COHPSK *cohpsk;
   char tx_bits_char[2 * COHPSK_BITS_PER_FRAME];

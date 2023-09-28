@@ -34,9 +34,12 @@
 
 #include "defines.h"
 #include "freedv_api.h"
+#include "pipe.h"
 
 int main(int argc, char *argv[]) {
   struct freedv *freedv;
+
+  init_binary_stdin_stdout();
 
   freedv = freedv_open(FREEDV_MODE_DATAC1);
   assert(freedv != NULL);
