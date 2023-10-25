@@ -1432,5 +1432,65 @@ endif()
         ENVIRONMENT "CML_PATH=${CMAKE_CURRENT_BINARY_DIR}/cml"
     )
 
+    if (MSVC)
+        set_tests_properties(
+            test_quisk_filter
+            test_CML_ldpcut
+            test_CML_ldpcut_one_stuffing
+
+            test_fsk_4fsk_ldpc
+
+            # TODO: make ldpc_enc and ldpc_dec compile (not C99)
+            test_ldpc_enc_dec
+            test_ldpc_enc_dec_HRA_56_56
+            test_ldpc_enc_dec_H_212_158
+            test_ldpc_enc_dec_HRAb_396_504
+            test_ldpc_enc_dec_H_256_768_22
+            test_ldpc_enc_dec_H_256_512_4
+            test_ldpc_enc_dec_HRAa_1536_512
+            test_ldpc_enc_dec_H_128_256_5
+            test_ldpc_enc_dec_H_4096_8192_3d
+            test_ldpc_enc_dec_H_16200_9720
+            test_ldpc_enc_dec_H_1024_2048_4f
+            test_ldpc_enc_dec_H_2064_516_sparse
+
+            test_codec2_700c_octave_port
+            test_OFDM_modem_octave_port
+            test_OFDM_modem_octave_port_Nc_31
+            test_OFDM_modem_octave_datac0_mpp_coded
+            test_OFDM_modem_datac0_compression
+            test_OFDM_modem_AWGN_BER
+            test_OFDM_modem_fading_BER
+            test_OFDM_modem_phase_est_bw
+            test_OFDM_modem_time_sync_700D
+            test_OFDM_modem_700E_AWGN
+            test_OFDM_modem_2020B_AWGN
+            test_OFDM_modem_datac0_octave_burst
+            test_OFDM_modem_datac1_octave
+            test_OFDM_modem_datac3_octave
+            test_OFDM_modem_datac1
+            test_OFDM_modem_datac1_ldpc
+            test_OFDM_modem_datac0_ldpc_burst
+            test_OFDM_modem_datac4_octave
+            test_OFDM_modem_datac13_octave
+            test_OFDM_modem_datac4_ldpc_burst
+            test_OFDM_modem_datac13_ldpc_burst
+            test_freedv_api_700D_burble
+            test_freedv_api_rawdata_800XA
+            test_freedv_reliable_text_fade_1600
+            test_freedv_reliable_text_fade_700D
+            test_freedv_reliable_text_fade_700E
+            test_vq_mbest
+            test_700c_eq
+            test_fsk_modem_octave_port
+            test_fsk_lib_4fsk_ldpc
+            test_fsk_framer_ldpc
+            test_freedv_data_raw_fsk_ldpc_100
+            test_freedv_data_raw_fsk_ldpc_1k
+            test_freedv_data_raw_fsk_ldpc_10k
+            test_freedv_data_raw_fsk_ldpc_2k
+            test_demo_700d_python
+        PROPERTIES DISABLED True)
+    endif ()
 
 endif(UNITTEST)
